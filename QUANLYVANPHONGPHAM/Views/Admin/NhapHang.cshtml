@@ -1,0 +1,202 @@
+﻿@using QUANLYVANPHONGPHAM.Models;
+@model List<SanPham>
+@{
+    ViewBag.Title = "Tài sản";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+<!DOCTYPE html>
+<html lang="vi">
+<style>
+    table {
+        width: 100%; /* Đặt chiều rộng bảng 100% */
+        border-collapse: collapse; /* Hợp nhất viền của các ô */
+    }
+
+    th, td {
+        border: 1px solid #ddd; /* Viền cho các ô */
+        padding: 8px; /* Khoảng cách bên trong các ô */
+        text-align: left; /* Căn chỉnh chữ bên trái */
+    }
+
+    th {
+        background-color: #f2f2f2; /* Màu nền cho tiêu đề */
+        font-weight: bold; /* Đậm cho tiêu đề */
+    }
+
+    tr:hover {
+        background-color: #f1f1f1; /* Màu nền khi di chuột qua hàng */
+    }
+
+</style>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>PHIẾU NHẬP</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <form>
+            <div class="form-group">
+                <label for="NgNhapHang">Ngày nhập hàng:</label>
+                <input type="date" id="NgNhapHang" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label for="MaNCC">Nhà cung cấp:</label>
+                <select id="MaNCC" class="form-control" required>
+                    <option value="">Chọn nhà cung cấp</option>
+                    <option value="NCC001">Tập đoàn Thiên Long</option>
+                    <option value="NCC002">Công ty Gia Phát</option>
+                    <option value="NCC003">Tân Thuận Tiến</option>
+                </select>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>MÃ SẢN PHẨM</th>
+                        <th>TÊN SẢN PHẨM</th>
+                        <th>SỐ LƯỢNG</th>
+                    </tr>
+                </thead>
+                <tbody id="productTableBody">
+                    <!-- Dòng sản phẩm sẽ được thêm vào đây -->
+                </tbody>
+            </table>
+
+            <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#productModal">+ Thêm sản phẩm</a>
+            <a href="#" class="btn btn-primary" id="confirmBtn">Xác nhận</a>
+        </form>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productModalLabel">Thêm sản phẩm mới</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addProductForm">
+                        <div class="form-group">
+                            <label for="productSelect">Sản phẩm:</label>
+                            <select id="productSelect" class="form-control" required>
+                                <option value="">Chọn sản phẩm</option>
+                                @foreach (var sanPham in Model)
+                                {
+                                    <option value="@sanPham.MaSP">@sanPham.TenSP</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="productQuantity">Số lượng:</label>
+                            <input type="number" class="form-control" id="productQuantity" placeholder="Nhập số lượng" required min="1">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary" form="addProductForm">Thêm sản phẩm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Thêm sản phẩm vào bảng
+        document.getElementById('addProductForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Ngăn chặn gửi form mặc định
+
+            const productSelect = document.getElementById('productSelect');
+            const productQuantity = document.getElementById('productQuantity');
+            const productTableBody = document.getElementById('productTableBody');
+
+            // Lấy giá trị từ form
+            const productId = productSelect.value;
+            const productName = productSelect.options[productSelect.selectedIndex].text;
+            const quantity = productQuantity.value;
+
+            // Tạo dòng mới trong bảng
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `<td>${productId}</td><td>${productName}</td><td>${quantity}</td>`;
+            productTableBody.appendChild(newRow);
+
+            // Đóng modal và reset form
+            $('#productModal').modal('hide');
+            this.reset();
+        });
+    </script>
+    <!--script gửi data về controller-->
+    <script>
+        $(document).ready(function () {
+            $('#confirmBtn').click(function (e) {
+                e.preventDefault();
+
+                // Lấy dữ liệu từ form
+                const ngNhapHang = $('#NgNhapHang').val();
+                const maNCC = $('#MaNCC').val();
+
+                // Lấy thông tin sản phẩm từ bảng
+                const selectedItems = [];
+                $('#productTableBody tr').each(function () {
+                    const productRow = $(this);
+                    const productCode = productRow.find('td:nth-child(1)').text();
+                    const quantity = productRow.find('td:nth-child(3)').text();
+                    selectedItems.push({ MaSP: productCode, SoLuong: quantity });
+                });
+
+                // Kiểm tra dữ liệu
+                if (selectedItems.length === 0) {
+                    alert('Vui lòng chọn ít nhất một sản phẩm!');
+                    return;
+                }
+
+                // Xác nhận với người dùng (tùy chọn)
+                if (!confirm('Bạn có chắc chắn muốn gửi dữ liệu?')) {
+                    return;
+                }
+
+                // Hiển thị loading indicator
+                $('#confirmBtn').prop('disabled', true);
+                $('#confirmBtn').text('Đang xử lý...');
+
+                // Chuyển đổi selectedItems thành JSON
+                const jsonSelectedItems = JSON.stringify(selectedItems);
+
+                // Gửi dữ liệu đến server
+                $.ajax({
+                    url: '/Admin/NhapHang',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        ngNhapHang,
+                        maNCC,
+                        selectedItems: jsonSelectedItems
+                    }),
+                    success: function (response) {
+                        // Xử lý thành công
+                        alert('Dữ liệu đã được gửi thành công!');
+                        // Thực hiện các hành động khác, ví dụ: làm mới trang, hiển thị thông báo, v.v.
+                        location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        // Xử lý lỗi
+                        alert('Có lỗi xảy ra: ' + error);
+                    },
+                    complete: function () {
+                        // Ẩn loading indicator
+                        $('#confirmBtn').prop('disabled', false);
+                        $('#confirmBtn').text('Xác nhận');
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

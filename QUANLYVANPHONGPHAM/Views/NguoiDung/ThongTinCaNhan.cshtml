@@ -1,0 +1,85 @@
+﻿@using QUANLYVANPHONGPHAM.Models
+@model NguoiDung
+@{
+    ViewBag.Title = "ThongTinCaNhan";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+</head>
+
+<style>
+    .table {
+        margin-block: 20px;
+        width: 90%;
+        margin-inline: auto;
+        background-color: lightskyblue;
+        border-radius: 9px;
+        
+    }
+    label{
+        margin-top: .5rem;
+    }
+</style>
+
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">Thông Tin Người Dùng</h2>
+        @using (Html.BeginForm("ThongTinCaNhan", "NguoiDung", FormMethod.Post))
+        {
+            <table class="table ">
+                <tr>
+                    <td>@Html.LabelFor(m => m.TenTaiKhoan, "Tên tài khoản", new { @class = "text" })</td>
+                    <td>@Html.TextBoxFor(m => m.TenTaiKhoan, new { @class = "form-control no-edit", @readonly = "readonly" })</td>
+                </tr>
+
+                <tr>
+                    <td>@Html.LabelFor(m => m.HoTen, "Họ tên")</td>
+                    <td>@Html.TextBoxFor(m => m.HoTen, new { @class = "form-control", @readonly = "readonly" })</td>
+                </tr>
+
+                <tr>
+                    <td>@Html.LabelFor(m => m.Email, "Email")</td>
+                    <td>@Html.TextBoxFor(m => m.Email, new { @class = "form-control", @readonly = "readonly" })</td>
+                </tr>
+
+                <tr>
+                    <td>@Html.LabelFor(m => m.DiaChi, "Địa chỉ")</td>
+                    <td>@Html.TextBoxFor(m => m.DiaChi, new { @class = "form-control", @readonly = "readonly" })</td>
+                </tr>
+
+                <tr>
+                    <td>@Html.LabelFor(m => m.SDT, "SDT")</td>
+                    <td>@Html.TextBoxFor(m => m.SDT, new { @class = "form-control", @readonly = "readonly" })</td>
+                </tr>
+
+            </table>
+
+            <button type="button" class="btn btn-primary mt-3 mb-3" onclick="enableEditing()" style="width:100px">Sửa</button>
+            <button type="submit" class="btn btn-primary mt-3 mb-3" style="width:100px">Lưu</button>
+        }
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["SuccessMessage"]
+            </div>
+            }
+        </div>
+</body>
+
+<script>
+    function enableEditing() {
+        // Lấy tất cả các TextBox có class form-control
+        var textBoxes = document.querySelectorAll('.form-control:not(.no-edit)');
+
+        // Bỏ thuộc tính readonly khỏi mỗi TextBox
+        textBoxes.forEach(function (textBox) {
+            textBox.removeAttribute('readonly');
+        });
+    }
+</script>
+</html>

@@ -1,0 +1,82 @@
+﻿@using QUANLYVANPHONGPHAM.Models
+@model DonHang
+@{
+    ViewBag.Title = "XacNhanDonHang";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+
+<style>
+    table{
+        width:25%;
+        margin:auto;
+    }
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+    form{
+        text-align:center
+    }
+</style>
+
+<h2 style="text-align:center">Xác nhận đơn hàng</h2>
+
+@if (TempData["Error"] != null)
+{
+    <p style="color: red;">@TempData["Error"]</p>
+}
+
+@using (Html.BeginForm("XacNhanDonHang", "Admin", FormMethod.Post))
+{
+    @Html.HiddenFor(m => m.MaDH)
+
+<table>
+    <tr>
+        <td>Mã đơn hàng:</td>
+        <td>@Model.MaDH</td>
+    </tr>
+    <tr>
+        <td>Ngày đặt hàng:</td>
+        <td>@Model.NgayDatHang.ToString("dd/MM/yyyy")</td>
+    </tr>
+    <tr>
+        <td>Tổng tiền:</td>
+        <td>@Model.TongTien.ToString("N0") VND</td>
+    </tr>
+    <tr>
+        <td>Phải trả:</td>
+        <td>@Model.PhaiTra.ToString("N0") VND</td>
+    </tr>
+    <tr>
+        <td>Trạng thái:</td>
+        <td>@Model.TrangThaiDH</td>
+    </tr>
+    <tr>
+        <td>Ngày giao hàng:</td>
+        <td>
+            @Html.TextBox("ngayGiaoHang", DateTime.Now.ToString("yyyy-MM-dd"), new { type = "date" })
+        </td>
+    </tr>
+
+    <tr>
+        <th colspan="2" style="text-align: center;">Thông tin khách hàng</th>
+    </tr>
+    <tr>
+        <td>Tên khách hàng:</td>
+        <td>@Model.NguoiDung.HoTen</td>
+    </tr>
+    <tr>
+        <td>Số điện thoại:</td>
+        <td>@Model.NguoiDung.SDT</td>
+    </tr>
+    <tr>
+        <td>Địa chỉ:</td>
+        <td>@Model.NguoiDung.DiaChi</td>
+    </tr>
+
+</table>
+
+    <button type="submit" class="btn btn-success" style="margin-top:10px"> Xác nhận</button>
+}

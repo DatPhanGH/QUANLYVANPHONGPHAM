@@ -1,0 +1,80 @@
+﻿@using QUANLYVANPHONGPHAM.Models
+@model ThongTinDonHang
+@{
+    ViewBag.Title = "ThongTinDonHang";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Thông tin đơn hàng</title>
+</head>
+<style>
+    table, tr, td {
+        border: 1px solid;
+        border-collapse: collapse;
+    }
+
+    table {
+        width: 100%;
+    }
+
+
+    tr {
+        border-bottom: 1px solid #ddd;
+    }
+
+    tr:nth-child(even) {
+        background-color: #D6EEEE;
+    }
+</style>
+<body>
+    <h2>Thông tin đơn hàng</h2>
+    @using (Html.BeginForm("LuuPTTT", "DonHang", FormMethod.Post))
+    {
+        @Html.HiddenFor(m => m.MaDH)
+        <table>
+            <tr>
+                <td>Mã đơn hàng</td>
+                <td>@Model.MaDH</td>
+            </tr>
+
+            @foreach (var item in Model.GioHang)
+            {
+                <tr>
+                    <td>Sản phẩm</td>
+                    <td>@item.Tensp</td>
+                </tr>
+            }
+            <tr>
+                <td>Tổng tiền</td>
+                <td>@Model.TongTien.ToString("N0") VND</td>
+            </tr>
+            <tr>
+                <td>Giảm giá</td>
+                <td>@Model.GiamGia.ToString("N0") VND</td>
+            </tr>
+            <tr>
+                <td>Phải trả</td>
+                <td>@Model.PhaiTra.ToString("N0") VND</td>
+            </tr>
+            <tr>
+                <td>Phương thức thanh toán</td>
+                <td style="display:flex; place-content:space-around;border:none">
+                    @foreach (var option in Model.pttt)
+                    {
+                        <div>
+                            @Html.RadioButtonFor(m => m.PhuongThucTT, option.Value, new { id = option.Value })
+                               
+                            <label for="@option.Value">@option.Text</label>
+                        </div>
+                    }
+                </td>
+            </tr>
+        </table>
+
+        <button type="submit" class="btn btn-primary" style="margin-top:10px">Xác nhận</button>
+    }
+
+</body>
+</html>

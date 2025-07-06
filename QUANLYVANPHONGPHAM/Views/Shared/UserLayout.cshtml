@@ -1,0 +1,304 @@
+﻿@using QUANLYVANPHONGPHAM.Models
+
+
+@{
+    Layout = null;
+    var user = Session["user"] as QUANLYVANPHONGPHAM.Models.NguoiDung;
+
+}
+
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width" />
+<title>Thienlong.vn</title>
+<!--Bootstrap 4-->
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="https://assets.harafunnel.com/widget/222376924552749/1676119.js" async="async"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+
+
+
+<!-- Bootstrap JS và Popper.js (trước thẻ đóng </body>) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+<html>
+<style>
+    .header_menu{
+        margin: 0px auto;
+    }
+    .cart-count {
+        position: relative;
+        top: 10px;
+        left: -5px;
+        color: red;
+        border-radius: 20px;
+        background-color: aliceblue;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        padding: 5px;
+    }
+    .wrapper {
+        background: linear-gradient(#6b6565);
+        margin: 0px auto;
+    }
+    .wp_content {
+        background: linear-gradient(#6b6565);
+        display: flex;
+        min-height: 500px;
+    }
+    .side_bar {
+        background: linear-gradient(#6b6565);
+        flex-basis: 30%;
+    }
+    .content{
+        padding: 10px;
+        flex-basis: 70%;
+        
+    }
+    .content_block{
+        padding: 10px;
+        background: #ffff;
+        border-radius: 10px;
+        margin: 0 0 10px 0;
+        border-style: solid;
+    }
+    .img-fluid {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .dropdown {
+        position: relative;
+    }
+
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        right: 0;
+    }
+
+        .dropdown-menu a {
+            color: black;
+            padding: 10px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+            .dropdown-menu a:hover {
+                background-color: #f1f1f1;
+            }
+</style>
+<head class="header header_menu">
+    <!--NAVIGATION-->
+    <!-- <div class="container-fluid"> -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+        @*<a class="navbar-brand row" href="~/SanPham/ShowSanPham"><img src="/HinhAnh/LogoThienLong.PNG" width="100%" class="rounded" /></a>*@
+        @*logo o day*@
+        <div class="col-6 col-lg-2 header-right p-0">
+
+
+            <a href="/SanPham/ShowSanPham" class="logo-wrapper">
+                <img class="img-fluid" src="https://file.hstatic.net/1000230347/file/logo_tl_2024.png" alt="logo Thiên Long Shop">
+            </a>
+
+        </div>
+        @*thanh tim kiem*@
+        <div class="col-12 col-lg-6 col-xl-6 header-center" id="search-header">
+            <form action="/SanPham/TimSanPham" method="get" class="input-group search-bar custom-input-group " role="search">
+                <input type="search" name="Tensp" value="" autocomplete="off" placeholder="Tìm kiếm sản phẩm..."
+                       class="input-group-field auto-search form-control " required="">
+                <input type="hidden">
+                <span class="input-group-btn btn-action">
+                    <button type="submit" class="btn text-white icon-fallback-text h-100 bg-primary" title="btn-search">
+                        <span class="fa fa-search"></span>
+                    </button>
+                </span>
+            </form>
+
+        </div>
+
+
+
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto mb-2 mb-lg-0">
+                <!--<li class="nav-item nav-link">
+    <a href="~/SanPham/ShowSanPham">Trang chủ</a>-->
+                @*@Html.ActionLink("Trang chủ ", "SachPartial", "Sach")*@
+                <!--</li>-->
+                @if (user == null) //nếu người dùng chưa đăng nhập
+                {
+                    <li class="nav-item nav-link">
+                        @*<a href="#" style="color:grey">Đăng Ký</a>*@
+                        @Html.ActionLink("Đăng Ký ", "DangKy", "NguoiDung", null, new { style = "color : gray" })
+                    </li>
+                    <li class="nav-item nav-link">
+                        @*<a href="#" style="color:grey">Đăng Nhập</a>*@
+                        @Html.ActionLink("Đăng Nhập ", "DangNhap", "NguoiDung", null, new { style = "color: gray" })
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item nav-link dropdown">
+                        <span style="margin:0;padding-right:10px;">Chào, @user.TenTaiKhoan</span>
+                        <i class="fas fa-user dropdown-toggle" onclick="toggleDropdown()"></i>
+                        <div class="dropdown-menu" id="userDropdown">
+
+                            <a class="dropdown-item" href="@Url.Action("ThongTinCaNhan", "NguoiDung")">Thông tin cá nhân</a>
+
+                            <hr style="margin:0" />
+
+                            <a class="dropdown-item" href="@Url.Action("DoiMatKhau", "NguoiDung")">Đổi mật khẩu</a>
+
+                            <hr style="margin:0" />
+
+                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#confirmLogoutModal">Đăng xuất</a>
+                        </div>
+                    </li>
+
+
+                    <li class="nav-item nav-link">
+                        @Html.ActionLink("Đơn hàng", "DonHangDangCho", "DonHang", null, new { style = "color: gray" })
+                    </li>
+
+                    <li class="nav-item nav-link">
+                        @Html.ActionLink("Đang vận chuyển", "DonHangDangVanChuyen", "DonHang", null, new { style = "color: gray" })
+                    </li>
+
+                    <li class="nav-item nav-link">
+                        @Html.ActionLink("Lịch sử mua hàng", "LichSuMuaHang", "DonHang", null, new { style = "color: gray" })
+                    </li>
+                }
+
+
+                @*hàm nhấn vào icon hiện ra thông tin cá nhân và đăng xuất*@
+                <script>
+                    function toggleDropdown() {
+                        var dropdown = document.getElementById("userDropdown");
+                        dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+                    }
+
+                    // Đóng dropdown nếu nhấp bên ngoài menu
+                    window.onclick = function (event) {
+                        if (!event.target.matches('.dropdown-toggle')) {
+                            var dropdowns = document.getElementsByClassName("dropdown-menu");
+                            for (var i = 0; i < dropdowns.length; i++) {
+                                var openDropdown = dropdowns[i];
+                                if (openDropdown.style.display === "block") {
+                                    openDropdown.style.display = "none";
+                                }
+                            }
+                        }
+                    }
+                </script>
+
+                <li class="nav-item nav-link">
+                    <a href="~/GioHang/GioHang" title="Giỏ hàng">
+                        <i class="fas fa-shopping-cart"></i>
+
+                        <span class="cart-count">
+                            @(Session["GioHang"] != null ? ((List<GioHang>)Session["GioHang"]).Sum(sp => sp.Soluong) : 0)
+                        </span>
+                    </a>
+
+
+                    @*@Html.ActionLink("Giỏ Hàng", "GioHang", "GioHang")*@
+
+                </li>
+            </ul>
+
+
+
+
+        </div>
+
+    </nav>
+
+    <!-- </div> -->
+    <!--CONTAIN-->
+
+
+</head>
+
+<body class="wrapper" style="background-color: #f0f0f0">
+    <div class="wp_content">
+        <div class="side_bar">                  
+            @* Phần hiển thị chủ đề*@
+            <ul class="list-group list-group-flush text-left">
+                
+                @Html.Action("BoSuuTapPartial", "BoSuuTap")
+                @*<li class="list-group-item"><a href="#" style="text-transform:uppercase; text-decoration:none;"> </a></li>*@
+            </ul>
+
+        </div>
+        <div class="content">
+            <div class="content_block">
+                @*thanh quang cao*@
+                <div id="carouselExampleControls" class="carousel w-100 mx-auto mt-3" data-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img src="/HinhAnh/Anh1.PNG" class="d-block" style="max-width: 80%; height: auto; margin: 0 auto;" alt="Ảnh 1" />
+                        </div>
+                        <div class="carousel-item">
+                            <img src="/HinhAnh/Anh2.PNG" class="d-block" style="max-width: 80%; height: auto; margin: 0 auto;" alt="Ảnh 2" />
+                        </div>
+                        <div class="carousel-item">
+                            <img src="/HinhAnh/Anh3.PNG" class="d-block" style="max-width: 80%; height: auto; margin: 0 auto;" alt="Ảnh 3" />
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+                @*body*@
+
+            <div class="content_block" style="text-align:center">
+                @RenderBody()
+            </div>
+            
+        </div>
+        
+    </div>
+</body>
+
+
+
+
+
+<!--Footer------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+<foot>
+    <div class="row" style="background-color:lightskyblue; text-align:center;">
+        <div class="col text-light mt-3 mb-3" style="text-align:center;">
+            Liên hệ: Khoa Công nghệ Thông tin - Trường Đại học Công nghiệp Thực phẩm Tp.HCM Link: fanpage và link: youtube <br />
+            Địa chỉ: 140 Lê Trọng Tấn, Phường Tây Thạnh, Quận Tân Phú, Tp.HCM. ĐT: (028).38161673 (ext 136) Mail: kcntt@hufi.edu.vn
+        </div>
+    </div>
+
+</foot>
+<!-- Modalxác nhận khi nhấn vào đăng xuất -->
+<div class="modal fade" id="confirmLogoutModal" tabindex="-1" aria-labelledby="confirmLogoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmLogoutModalLabel">Xác nhận đăng xuất</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn đăng xuất không?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Không</button>
+                <a href="@Url.Action("DangXuat", "NguoiDung")" class="btn btn-primary">Có</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>

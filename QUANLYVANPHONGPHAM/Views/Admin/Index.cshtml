@@ -1,0 +1,64 @@
+﻿
+@{
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<style>
+    .team-info{
+        text-align: center;
+        text-transform: uppercase;
+    }
+    table {
+        width: 100%; /* Đặt chiều rộng bảng 100% */
+        border-collapse: collapse; /* Hợp nhất viền của các ô */
+    }
+
+    th, td {
+        border: 1px solid #ddd; /* Viền cho các ô */
+        padding: 8px; /* Khoảng cách bên trong các ô */
+        text-align: left; /* Căn chỉnh chữ bên trái */
+    }
+
+    th {
+        background-color: #f2f2f2; /* Màu nền cho tiêu đề */
+        font-weight: bold; /* Đậm cho tiêu đề */
+    }
+
+    tr:hover {
+        background-color: #f1f1f1; /* Màu nền khi di chuột qua hàng */
+    }
+</style>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <div class="team-info">
+         Thông tin liên hệ khi gặp vấn đề
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Họ và tên</th>
+                <th>Mã số sinh viên</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>Nguyễn Hữu Thành</td>
+                <td>2001224705</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Phan Thành Đạt</td>
+                <td>2001220904</td>
+            </tr>
+        </tbody>      
+    </table>
+</body>
+</html>

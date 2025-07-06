@@ -1,0 +1,83 @@
+﻿@using QUANLYVANPHONGPHAM.Controllers
+@model IEnumerable<QUANLYVANPHONGPHAM.Models.DonHang>
+
+@{
+    ViewBag.Title = "DonHangDangChoAdmin";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<style>
+    table{
+        width:100%;
+    }
+
+    tr {
+        border-bottom: 1px solid #ddd;
+    }
+
+        tr:nth-child(even) {
+            background-color: #D6EEEE;
+        }
+</style>
+<h2 style="text-align:center">Đơn hàng chờ xác nhận</h2>
+
+@{ 
+    string iconsort = "";
+    if (ViewBag.iconsort == "fa-sort-desc")
+    {
+        iconsort = "fa-sort-asc";
+    } 
+    else 
+    {
+        iconsort = "fa-sort-desc";
+    }
+}
+
+@if (!Model.Any())
+{
+    <p style="color: red; font-size: 16px; font-weight: bold;">
+        Hiện tại không có đơn hàng nào chờ xác nhận.
+    </p>
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Mã đơn hàng</th>
+                <th>
+                    <a href="/Admin/DonHangDangChoAdmin?sortNgayDat=NgayDatHang&iconsort=@iconsort">Ngày đặt hàng</a>
+                    @if(ViewBag.sortNgayDat == "NgayDatHang")
+                    {
+                        <i class="fa @ViewBag.iconsort"></i>
+                    }
+                </th>
+                <th>Tổng tiền</th>
+                <th>Phải trả</th>
+                <th>Trạng thái</th>
+                <th>Xác nhận</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var donHang in Model)
+            {
+                <tr>
+                    <td>@donHang.MaDH</td>
+                    <td>@donHang.NgayDatHang.ToString("dd/MM/yyyy")</td>
+                    <td>@donHang.TongTien.ToString("N0") VND</td>
+                    <td>@donHang.PhaiTra.ToString("N0") VND</td>
+                    <td>@donHang.TrangThaiDH</td>
+                    <td>
+                        @using (Html.BeginForm("XacNhanDonHang", "Admin", FormMethod.Get))
+                        {
+                            @Html.Hidden("maDH", donHang.MaDH)
+                            <button type="submit" class="btn btn-success">Xác nhận</button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <strong>Số lượng đơn đặt: @Model.Count()</strong>
+}
+

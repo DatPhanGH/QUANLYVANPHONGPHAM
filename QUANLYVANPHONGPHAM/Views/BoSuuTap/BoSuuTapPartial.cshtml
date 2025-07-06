@@ -1,0 +1,60 @@
+﻿@using QUANLYVANPHONGPHAM.Models
+@model List<LoaiSP>
+@{
+    Layout = null;
+}
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<style>
+    .chudepartial {
+        padding: 10px;
+        
+        text-transform: uppercase;
+    }
+    .menu_item_label{
+        padding: 10px;
+        background: #ffffff;
+        color: #000000;
+        text-decoration: none; 
+       
+    }
+    .menu-container {
+        padding: 0px;
+        border-radius: 10px;
+        grid-gap: 20px;
+        background: linear-gradient(#6b6565);
+        border: 1px solid;
+        margin-left:10px;
+        margin-top:10px;
+    }
+    ul {
+        list-style-type: none;
+    }
+
+</style>
+
+<body>
+    <div class="menu-container">
+        <li class="list-group-item" style="background-color:lightskyblue;">
+            <a href="#" style="text-transform:uppercase; text-decoration:none; color:white; font-weight:bold;">Bộ Sưu Tập</a>
+        </li>
+
+        @foreach (var item in Model)
+        {
+            <li class="menu_item_label">
+                <a href="@Url.Action("SanPhamTheoLoai", "BoSuuTap", new { MaLoai = item.MaLoai })"
+                   class="menu_item_label"
+                   title="@item.TenLoai">
+                    <span>
+                        @item.TenLoai
+                    </span>
+                </a>
+            </li>
+
+        }
+    </div>
+    
+</body>
+</html>

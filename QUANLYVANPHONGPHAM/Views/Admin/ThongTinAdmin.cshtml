@@ -1,0 +1,94 @@
+﻿@using QUANLYVANPHONGPHAM.Models
+@model NguoiDung
+
+@{
+    ViewBag.Title = "ThongTinAdmin";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+</head>
+
+<style>
+    .table {
+        margin-block: 20px;
+        width: 60%;
+        margin-inline: auto;
+        background-color: #fff;
+     
+        /*        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);*/
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), /* Bóng gần */
+        0 10px 20px rgba(0, 0, 0, 0.2); /* Bóng xa */
+        border-radius:10px;
+    }
+
+    label {
+        margin-top: .5rem;
+    }
+    .form-control{
+        max-width:100%;
+    }
+</style>
+
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">Thông Tin Admin</h2>
+        @using (Html.BeginForm("ThongTinAdmin", "Admin", FormMethod.Post))
+        {
+            <table class="table ">
+                <tr>
+                    <td>@Html.LabelFor(m => m.TenTaiKhoan, "Tên tài khoản", new { @class = "text" })</td>
+                    <td>@Html.TextBoxFor(m => m.TenTaiKhoan, new { @class = "form-control no-edit", @readonly = "readonly" })</td>
+                </tr>
+
+                <tr>
+                    <td>@Html.LabelFor(m => m.HoTen, "Họ tên")</td>
+                    <td>@Html.TextBoxFor(m => m.HoTen, new { @class = "form-control", @readonly = "readonly" })</td>
+                </tr>
+
+                <tr>
+                    <td>@Html.LabelFor(m => m.Email, "Email")</td>
+                    <td>@Html.TextBoxFor(m => m.Email, new { @class = "form-control", @readonly = "readonly" })</td>
+                </tr>
+
+                <tr>
+                    <td>@Html.LabelFor(m => m.DiaChi, "Địa chỉ")</td>
+                    <td>@Html.TextBoxFor(m => m.DiaChi, new { @class = "form-control", @readonly = "readonly" })</td>
+                </tr>
+
+                <tr>
+                    <td>@Html.LabelFor(m => m.SDT, "SDT")</td>
+                    <td>@Html.TextBoxFor(m => m.SDT, new { @class = "form-control", @readonly = "readonly" })</td>
+                </tr>
+
+            </table>
+            <div style="text-align:center">
+                <button type="button" class="btn btn-primary mt-3 mb-3" onclick="enableEditing()" style="width:100px">Sửa</button>
+                <button type="submit" class="btn btn-primary mt-3 mb-3" style="width:100px">Lưu</button>
+            </div>
+        }
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+</body>
+
+<script>
+    function enableEditing() {
+        // Lấy tất cả các TextBox có class form-control
+        var textBoxes = document.querySelectorAll('.form-control:not(.no-edit)');
+
+        // Bỏ thuộc tính readonly khỏi mỗi TextBox
+        textBoxes.forEach(function (textBox) {
+            textBox.removeAttribute('readonly');
+        });
+    }
+</script>
+</html>
+

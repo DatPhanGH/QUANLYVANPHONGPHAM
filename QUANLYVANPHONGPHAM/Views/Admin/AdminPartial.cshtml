@@ -1,0 +1,54 @@
+﻿@using QUANLYVANPHONGPHAM.Models
+@model List<LoaiSP>
+@{
+    Layout = null;
+}
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<style>
+
+
+    .menu_item_label {
+        padding: 10px;
+        background: #ffffff;
+        color: #000000;
+        text-decoration: none;
+        
+    }
+
+    .menu-container {
+        padding: 20px;
+        border-radius: 10px;
+        grid-gap: 20px;
+        background: linear-gradient(#6b6565);
+        
+    }
+
+    ul {
+        list-style-type: none;
+    }
+</style>
+
+<body>
+    <div class="menu-container">
+        <li class="list-group-item" style="background-color:crimson;">
+            <a href="#" style="text-transform:uppercase; text-decoration:none; color:white; font-weight:bold;">Danh mục</a>
+        </li>
+        <li class="menu_item_label">
+            <a href="#" style="text-transform:uppercase; text-decoration:none; color:white; font-weight:bold;">Sản phẩm</a>
+        </li>
+        <li class="menu_item_label">
+            <a href="#" style="text-transform:uppercase; text-decoration:none; color:white; font-weight:bold;">Nhập hàng</a>
+        </li>
+        <li class="menu_item_label>
+            <a href="#" style="text-transform:uppercase; text-decoration:none; color:white; font-weight:bold;">Khách hàng</a>
+        </li>
+        <li class="menu_item_label">
+            <a href="#" style="text-transform:uppercase; text-decoration:none; color:white; font-weight:bold;">Doanh thu</a>
+        </li>
+    </div>
+
+</body>
+</html>

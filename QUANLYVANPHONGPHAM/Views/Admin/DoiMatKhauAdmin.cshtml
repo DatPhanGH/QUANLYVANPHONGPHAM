@@ -1,0 +1,71 @@
+﻿@using QUANLYVANPHONGPHAM.Models
+@model DoiMatKhau
+@{
+    ViewBag.Title = "DoiMatKhauAdmin";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Đổi mật khẩu</title>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+</head>
+
+<style>
+    .container-doimk {
+        max-width: 400px;
+        margin: 100px auto;
+        padding: 20px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .container-doimk h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .container-doimk .form-group {
+        margin-bottom: 15px;
+    }
+
+    .container-doimk button {
+        width: 100%;
+    }
+
+    .form-control{
+        max-width:100%;
+    }
+</style>
+
+<body>
+    @using (Html.BeginForm("DoiMatKhauAdmin", "Admin", FormMethod.Post))
+    {
+        <div class="container-doimk">
+            <h2>Đổi Mật Khẩu</h2>
+
+            <div class="form-group input-group">
+                @Html.TextBoxFor(m => m.MatKhauCu, new { @class = "form-control", placeholder = "Mật khẩu cũ" })
+            </div>
+
+            <div class="form-group input-group">
+                @Html.TextBoxFor(m => m.MatKhauMoi, new { @class = "form-control", placeholder = "Mật khẩu mới" })
+            </div>
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+            <button type="submit" class="btn btn-primary mt-4">Đổi mật khẩu</button>
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger mt-3">@TempData["ErrorMessage"]</div>
+            }
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success mt-3">@TempData["SuccessMessage"]</div>
+            }
+        </div>
+    }
+
+</body>
+</html>
+

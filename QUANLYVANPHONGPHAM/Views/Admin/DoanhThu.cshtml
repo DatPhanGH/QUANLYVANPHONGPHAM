@@ -1,0 +1,177 @@
+﻿@using QUANLYVANPHONGPHAM.Models
+@model DoanhThuViewModel
+
+@{
+    ViewBag.Title = "DoanhThu";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h2>Doanh Thu</h2>
+
+<form method="post" action="@Url.Action("DoanhThu", "Admin")">
+    <div>
+        <label>Loại Thống Kê:</label>
+        <select name="LoaiThongKe" id="LoaiThongKe" onchange="toggleNgayKetThuc()">
+            <option value="Ngay" selected="@(Model.LoaiThongKe == "Ngay" ? "selected" : "")">Theo Ngày</option>
+            <option value="Thang" selected="@(Model.LoaiThongKe == "Thang" ? "selected" : "")">Theo Tháng</option>
+        </select>
+    </div>
+    <div>
+        <label>Ngày Bắt Đầu:</label>
+        <input type="date" name="NgayBatDau" value="@Model.NgayBatDau?.ToString("yyyy-MM-dd")" />
+    </div>
+    <div id="ngayKetThucDiv">
+        <label>Ngày Kết Thúc:</label>
+        <input type="date" name="NgayKetThuc" value="@Model.NgayKetThuc?.ToString("yyyy-MM-dd")" />
+    </div>
+    <button type="submit">Thống Kê</button>
+</form>
+
+<table>
+    <thead>
+        <tr>
+            <th>Ngày/Tháng</th>
+            <th>Doanh Thu</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.DanhSachDoanhThu)
+        {
+            <tr>
+                <td>
+                    @if (Model.LoaiThongKe == "Ngay")
+                    {
+                        @(item.Ngay.HasValue ? item.Ngay.Value.ToString("dd/MM/yyyy") : "")
+                    }
+                    else
+                    {
+                        @($"{item.Thang}/{item.Nam}")
+                    }
+                </td>
+                <td>@item.DoanhThu.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<canvas id="doanhThuChart" width="400" height="200"></canvas>
+
+<script>
+    // Hàm thay đổi hiển thị của Ngày Kết Thúc
+    function toggleNgayKetThuc() {
+        var loaiThongKe = document.getElementById("LoaiThongKe").value;
+        var ngayKetThucDiv = document.getElementById("ngayKetThucDiv");
+
+        if (loaiThongKe === "Ngay") {
+            // Ẩn hoặc vô hiệu hóa Ngày Kết Thúc khi thống kê theo ngày
+            ngayKetThucDiv.style.display = "none";
+            document.querySelector("input[name='NgayKetThuc']").disabled = true;
+        } else {
+            // Hiện Ngày Kết Thúc khi thống kê theo tháng
+            ngayKetThucDiv.style.display = "block";
+            document.querySelector("input[name='NgayKetThuc']").disabled = false;
+        }
+    }
+
+    // Gọi hàm khi load trang để xử lý giá trị mặc định
+    toggleNgayKetThuc();
+</script>
+
+<script>
+    // Dữ liệu từ Model.DanhSachDoanhThu
+    var danhSachDoanhThu = @Html.Raw(Json.Encode(Model.DanhSachDoanhThu));
+
+    // Lấy các ngày/tháng và doanh thu từ danh sách
+    //var labels = danhSachDoanhThu.map(item => item.Ngay ? item.Ngay.toString("dd/MM/yyyy") : item.Thang + '/' + item.Nam);
+
+    //var labels = danhSachDoanhThu.map(function (item) {
+    //    // Nếu là thống kê theo ngày
+    //    if (item.Ngay) {
+    //        return new Date(item.Ngay).toLocaleDateString('vi-VN'); // Định dạng lại ngày cho đúng
+
+    //    } else {
+    //        return item.Thang + '/' + item.Nam;
+    //    }
+    //});
+
+    // Hàm chuyển đổi chuỗi ngày từ dd/MM/yyyy thành đối tượng Date
+    function parseDate(dateString) {
+        // Tách phần ngày, tháng, năm từ chuỗi ngày có thể chứa thời gian
+        var parts = dateString.split(' ')[0].split('-'); // Lấy phần ngày (định dạng yyyy-MM-dd)
+
+        // parts[0] = ngày, parts[1] = tháng, parts[2] = năm
+        var day = parts[0];
+        var month = parts[1] - 1; // JavaScript Month bắt đầu từ 0
+        var year = parts[2];
+
+        // Tạo đối tượng Date theo đúng cấu trúc
+        var date = new Date(year, month, day);
+
+        // Kiểm tra nếu ngày hợp lệ
+        if (date.getDate() == day && date.getMonth() == month && date.getFullYear() == year) {
+            return date; // Trả về đối tượng Date nếu hợp lệ
+        } else {
+            return null; // Trả về null nếu không hợp lệ
+        }
+    }
+
+    var labels = danhSachDoanhThu.map(function (item) {
+        // Nếu là thống kê theo ngày
+        if (item.Ngay) {
+            // Chuyển đổi chuỗi ngày thành đối tượng Date
+            var date = parseDate(item.Ngay);
+
+            // Kiểm tra nếu ngày hợp lệ
+            if (date) {
+                // Lấy ngày, tháng và năm từ đối tượng Date
+                var day = ("0" + date.getDate()).slice(-2); // Lấy ngày (đảm bảo 2 chữ số)
+                var month = ("0" + (date.getMonth() + 1)).slice(-2); // Lấy tháng (đảm bảo 2 chữ số)
+                var year = date.getFullYear(); // Lấy năm
+
+                // Trả về ngày theo định dạng dd/MM/yyyy
+                return `${day}/${month}/${year}`;
+            } else {
+                return "Ngày không hợp lệ"; // Nếu ngày không hợp lệ
+            }
+        } else {
+            // Nếu thống kê theo tháng, hiển thị tháng/năm
+            return item.Thang + '/' + item.Nam;
+        }
+    });
+
+
+    //var doanhThuData = danhSachDoanhThu.map(item => item.DoanhThu);
+
+    var doanhThuData = danhSachDoanhThu.map(function (item) {
+        return item.DoanhThu;
+    });
+
+    // Cấu hình biểu đồ
+    var ctx = document.getElementById('doanhThuChart').getContext('2d');
+    var doanhThuChart = new Chart(ctx, {
+        type: 'bar', // Kiểu biểu đồ cột
+        data: {
+            labels: labels, // Ngày hoặc tháng
+            datasets: [{
+                label: 'Doanh Thu',
+                data: doanhThuData, // Dữ liệu doanh thu
+                backgroundColor: 'rgba(54, 162, 235, 0.2)', // Màu nền
+                borderColor: 'rgba(54, 162, 235, 1)', // Màu viền
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true, // Đảm bảo trục y bắt đầu từ 0
+                    ticks: {
+                        callback: function(value) {
+                            return value.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }); // Định dạng doanh thu
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>

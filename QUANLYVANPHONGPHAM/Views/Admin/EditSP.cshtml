@@ -1,0 +1,65 @@
+﻿@using QUANLYVANPHONGPHAM.Models
+@model SanPham
+@{
+    ViewBag.Title = "EditSP";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h2>Chỉnh sửa sản phẩm</h2>
+
+@using (Html.BeginForm("EditSP", "Admin", FormMethod.Post, new { enctype = "multipart/form-data", style = "display: grid; justify-content: space-evenly;background: aliceblue;border: 1px solid powderblue;border-radius: 10px;padding-block: 10px;width:50%; margin:auto;" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.MaSP)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.TenSP, "Tên sản phẩm")
+        @Html.EditorFor(model => model.TenSP, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.TenSP, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.MaLoai, "Loại sản phẩm")
+        @*@Html.DropDownList("LoaiSP", null, "Chọn loại sản phẩm", new { @class = "form-control" })*@
+        @Html.DropDownListFor(model => model.MaLoai, (SelectList)ViewBag.LoaiSP, "-- Chọn loại sản phẩm --", new { @class = "form-control" })
+
+        @Html.ValidationMessageFor(model => model.MaLoai, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.GiaBan, "Giá bán")
+        @Html.EditorFor(model => model.GiaBan, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.GiaBan, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.SoLuongTon, "Số lượng tồn kho", new { @class = "control-label" })
+        @Html.TextBoxFor(m => m.SoLuongTon, new { @class = "form-control", type = "number" })
+        @Html.ValidationMessageFor(model => model.SoLuongTon, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.MoTa, "Mô tả", new { @class = "control-label" })
+        @Html.TextAreaFor(model => model.MoTa, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.MoTa, "", new { @class = "text-danger" })
+    </div>
+
+    
+    <div class="form-group">
+        @Html.LabelFor(model => model.HinhAnh, "Hình ảnh hiện tại")
+        <br />
+        <img src="~/@Model.HinhAnh" alt="Hình ảnh sản phẩm" style="max-width: 200px; height: auto;" />
+
+       
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Cập nhật hình ảnh mới")
+        <input type="file" name="file" class="form-control" />
+        <small class="form-text text-muted">Để trống nếu không muốn thay đổi hình ảnh.</small>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+    <a href="@Url.Action("TaiSan", "Admin")" class="btn btn-secondary">Hủy</a>
+}
+

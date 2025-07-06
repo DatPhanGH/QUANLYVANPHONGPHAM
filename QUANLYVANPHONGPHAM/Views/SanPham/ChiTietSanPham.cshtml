@@ -1,0 +1,39 @@
+﻿@using QUANLYVANPHONGPHAM.Models;
+@model SanPham
+
+@{
+    ViewBag.Title = "XemChiTiet";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+<style>
+    .chitiet {
+        padding: 10px;
+        background: #ffff;
+        border-radius: 10px;
+        margin: 0 0 10px 0;
+        border-style: solid;
+    }
+</style>
+<body class="chitiet">
+    <form>
+        <img src="~/@Model.HinhAnh" alt="Alternate Text" /><br />
+        <label>Tên sách: @Model.TenSP</label><br />
+        <label>Giá sách: @Model.GiaBan</label><br />
+        <label>Số lượng còn: @Model.SoLuongTon</label><br />
+        @if (Model.SoLuongTon > 0)
+        {
+            <a href="@Url.Action("ThemGioHang", "GioHang", new { @masp = @Model.MaSP, @url = Request.Url.PathAndQuery })" class="btn btn-primary">Thêm vào giỏ hàng</a><br /><br />
+            <a href="@Url.Action("ThemGioHang", "GioHang", new { @masp = @Model.MaSP, @url = "GioHang" })" class="btn btn-primary">Mua Ngay</a>
+        }
+        else
+        {
+            <p class="text-danger">Sản phẩm này đã hết hàng!</p>
+        }
+
+        @*<a href="@Url.Action("ThemGioHang", "GioHang", new { @masp = @Model.MaSP, @url = Request.Url.PathAndQuery })" class="btn btn-primary">Thêm vào giỏ hàng</a><br /><br />
+        <a href="@Url.Action("ThemGioHang", "GioHang", new { @masp = @Model.MaSP, @url = "GioHang" })" class="btn btn-primary">Mua Ngay</a>*@
+        <a href="@Url.Action("ShowSanPham", "SanPham")" class="btn btn-primary">Mua Tiếp</a>
+    </form>
+</body>
+
+

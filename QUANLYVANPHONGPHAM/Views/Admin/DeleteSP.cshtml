@@ -1,0 +1,26 @@
+﻿@using QUANLYVANPHONGPHAM.Models
+@model SanPham
+@{
+    ViewBag.Title = "DeleteSP";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h2>Xóa sản phẩm</h2>
+
+<p>Bạn có chắc chắn muốn xóa sản phẩm sau?</p>
+
+<div>
+    <h4>@Model.TenSP</h4>
+    <p>Giá: @Model.GiaBan</p>
+    <p>Số lượng tồn: @Model.SoLuongTon</p>
+    <img src="~/@Model.HinhAnh" alt="@Model.TenSP" width=200 style="filter: drop-shadow( 10px 10px 15px rgba(0, 0, 0, 0.5)); ">
+</div>
+
+@using (Html.BeginForm("DeleteSP", "Admin", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.MaSP)
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    <a href="@Url.Action("TaiSan", "Admin")" class="btn btn-secondary">Hủy</a>
+}
+

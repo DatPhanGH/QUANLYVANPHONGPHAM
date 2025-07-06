@@ -1,0 +1,242 @@
+﻿@using QUANLYVANPHONGPHAM.Models
+@model KhachHang
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Đăng ký</title>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+</head>
+<style>
+    .card-body {
+        width: 450px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 10px;
+    }
+
+    .input-group {
+        margin: 10px 0 10px 0;
+    }
+
+    .btn {
+        margin: 10px 0 10px 0;
+        width: 100%;
+    }
+
+    li {
+        list-style-type: none;
+    }
+    
+    .modal{
+        display:block;
+    }
+
+    /* Đặt thuộc tính mặc định cho modal (ẩn đi và có hiệu ứng mờ dần) */
+    #successModal {
+        /*display: none !important; */
+        visibility: hidden;
+        opacity: 0;
+        transform: scale(0.9);
+        transition: visibility 0s 0.3s, opacity 0.3s linear, transform 0.3s linear;
+    }
+
+    /* Khi modal hiển thị (sử dụng class `show`), áp dụng hiệu ứng */
+        #successModal.show {
+            display: block !important;
+            visibility: visible;
+            opacity: 1;
+            transform: scale(1);
+            /*transition: visibility 0s 1s, opacity 1s linear, transform 1s linear;*/
+        }
+
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .login-container {
+        max-width: 450px;
+        margin-top:30px;
+        padding: 20px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+</style>
+
+<body>
+    
+        @using (Html.BeginForm("DangKy", "NguoiDung", FormMethod.Post))
+        {
+            <div class="card-body mx-auto login-container">
+
+                <h4 class="card-title mt-3 mb-3 text-center">Đăng Ký Tài Khoản</h4>
+
+                <div class="form-group input-group">
+                    <span class="input-group-text"><i class="fas fa-lock"></i>  </span>
+                    @Html.TextBoxFor(m => m.TenTaiKhoan, new { @class = "form-control", placeholder = "Tên tài khoản" })
+                </div>
+                @Html.ValidationMessageFor(m => m.TenTaiKhoan, "", new { @class = "text-danger" })
+
+
+                <div class="form-group input-group">
+                    <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                    @Html.TextBoxFor(m => m.HoTen, new { @class = "form-control", placeholder = "Họ tên" })
+                </div>
+                @Html.ValidationMessageFor(m => m.HoTen, "", new { @class = "text-danger" })
+
+
+                <div class="form-group input-group">
+                    <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email" })
+                </div>
+                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+
+
+                <div class="form-group input-group">
+                    <span class="input-group-text"> <i class="fas fa-map-marker-alt"></i> </span>
+                    @Html.TextBoxFor(m => m.DiaChi, new { @class = "form-control", placeholder = "Địa chỉ" })
+                </div>
+                @Html.ValidationMessageFor(m => m.DiaChi, "", new { @class = "text-danger" })
+
+
+                <div class="form-group input-group">
+                    <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
+                    @Html.TextBoxFor(m => m.SDT, new { @class = "form-control", placeholder = "Số điện thoại" })
+                </div>
+                @Html.ValidationMessageFor(m => m.SDT, "", new { @class = "text-danger" })
+
+
+                <div class="form-group input-group">
+                    <span class="input-group-text"> <i class="fas fa-key"></i> </span>
+                    @Html.PasswordFor(m => m.MatKhau, new { @class = "form-control", placeholder = "Mật khẩu", id = "passwordInput" })
+                    <span id="togglePassword" style="cursor: pointer; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);">
+                        <i class="fa fa-eye" id="eyeIcon1"></i>
+                    </span>
+                </div>
+                @Html.ValidationMessageFor(m => m.MatKhau, "", new { @class = "text-danger" })
+
+
+
+                <div class="form-group input-group">
+                    <span class="input-group-text"> <i class="fas fa-check"></i> </span>
+                    @Html.PasswordFor(m => m.XacNhanMK, new { @class = "form-control", placeholder = "Xác nhận mật khẩu", id = "confPasswordInput" })
+                    <span id="toggleConfPassword" style="cursor: pointer; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);">
+                        <i class="fa fa-eye" id="eyeIcon2"></i>
+                    </span>
+                </div>
+                @Html.ValidationMessageFor(m => m.XacNhanMK, "", new { @class = "text-danger" })
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block">Đăng Ký </button>
+                </div>
+
+                <p class="text-center">Bạn đã có tài khoản? <a href="@Url.Action("DangNhap","NguoiDung")">Đăng Nhập</a> </p>
+
+            </div>
+
+        }
+   
+
+        @if (ViewBag.SignUpSuccess != null && ViewBag.SignUpSuccess == true)
+        {
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    // Hiển thị popup sau khi trang load nếu có thông báo thành công
+                    showSuccessPopup();
+                });
+            </script>
+        }
+
+        <!-- Modal thông báo thành công -->
+        <div id="successModal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Thông báo</h5>
+                        <button type="button" class="close" onclick="closeSuccessPopup()">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>@ViewBag.SignUpSuccess đăng ký thành công</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" onclick="closeSuccessPopup()">Đóng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</body>
+
+<script>
+
+    // thực hiện chức năng show password
+    document.getElementById('togglePassword').addEventListener('click', function () {
+        const passwordInput = document.getElementById('passwordInput');
+        const eyeIcon = document.getElementById('eyeIcon1');
+
+        // Kiểm tra trạng thái mật khẩu
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            eyeIcon.classList.remove('fa-eye');
+            eyeIcon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = "password";
+            eyeIcon.classList.remove('fa-eye-slash');
+            eyeIcon.classList.add('fa-eye');
+        }
+    });
+    // thực hiện chức năng show password
+    document.getElementById('toggleConfPassword').addEventListener('click', function () {
+        const confPasswordInput = document.getElementById('confPasswordInput');
+        const eyeIcon = document.getElementById('eyeIcon2');
+
+        // Kiểm tra trạng thái mật khẩu
+        if (confPasswordInput.type === "password") {
+            confPasswordInput.type = "text";
+            eyeIcon.classList.remove('fa-eye');
+            eyeIcon.classList.add('fa-eye-slash');
+        } else {
+            confPasswordInput.type = "password";
+            eyeIcon.classList.remove('fa-eye-slash');
+            eyeIcon.classList.add('fa-eye');
+        }
+    });
+
+    //thực hiện chức năng hiển pop up thông báo đăng ký thành công
+    function showSuccessPopup() {
+        const modal = document.getElementById("successModal");
+        modal.style.visibility = "visible"; 
+        setTimeout(() => {
+            modal.classList.add("show"); 
+        }, 5); 
+    }
+
+    function closeSuccessPopup() {
+        const modal = document.getElementById("successModal");
+        modal.classList.remove("show");
+        
+        setTimeout(function () {
+            window.location.href = '@Url.Action("ShowSanPham", "SanPham")';
+        }, 300);
+       
+    }
+
+
+</script>
+
+
+
+</html>

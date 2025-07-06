@@ -1,0 +1,75 @@
+﻿@model string
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Quên mật khẩu</title>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+</head>
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .container {
+        max-width: 400px;
+        margin: 100px auto;
+        padding: 20px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+        .container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .container .form-group {
+            margin-bottom: 15px;
+        }
+
+        .container button {
+            width: 100%;
+        }
+</style>
+
+<body>
+    <div class="container">
+        <h2>Quên Mật Khẩu</h2>
+        <p>Vui lòng nhập email hoặc số điện thoại để nhận mã đặt lại mật khẩu.</p>
+
+        @using (Html.BeginForm("QuenMatKhauAdmin", "Admin", FormMethod.Post))
+        {
+            <div class="form-group">
+
+                @Html.TextBox("contactInfo", null, new { @class = "form-control", @placeholder = "Email hoặc Số điện thoại" })
+            </div>
+
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+            <button type="submit" class="btn btn-primary mt-2">Gửi mã</button>
+        }
+
+        @*nếu sdt hoặc email có tồn tại trong csdl*@
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success mt-3">@TempData["SuccessMessage"]</div>
+        }
+
+        @if (ViewBag.GeneratedCode != null)
+        {
+            <div class="alert alert-info mt-3">
+                <strong>Mã xác nhận:</strong> @ViewBag.GeneratedCode
+                <p>Quay lại đăng nhập  <a href="@Url.Action("DangNhapAdmin","Admin")">Tại đây</a> </p>
+            </div>
+        }
+    </div>
+</body>
+</html>

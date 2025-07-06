@@ -1,0 +1,80 @@
+﻿@using QUANLYVANPHONGPHAM.Models
+@model IEnumerable<DonHang>
+@{
+    ViewBag.Title = "DonHangDangCho";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+
+<style>
+
+    table {
+        width: 100%;
+    }
+
+    tr {
+        border-bottom: 1px solid #ddd;
+    }
+
+        tr:nth-child(even) {
+            background-color: #D6EEEE;
+        }
+
+    
+</style>
+<body>
+    <h2 >Đơn hàng đang chờ xác nhận</h2>
+    @if (!Model.Any())
+    {
+        <p style="color: red; font-size: 16px; font-weight: bold;">
+            Hiện tại không có đơn hàng nào đang chờ xác nhận.
+        </p>
+    }
+
+
+    else
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Mã đơn hàng</th>
+                    <th>Ngày đặt hàng</th>
+                    <th>Tổng tiền</th>
+                    <th>Giảm giá</th>
+                    <th>Phải trả</th>
+                    <th>Trạng thái</th>
+                    <th>Chi tiết</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var donHang in Model)
+                {
+                    <tr>
+                        <td>@donHang.MaDH</td>
+                        <td>@donHang.NgayDatHang.ToString("dd/MM/yyyy")</td>
+                        <td>@donHang.TongTien.ToString("N0") VND</td>
+                        <td>@donHang.GiamGia.ToString()</td>
+                        <td>@donHang.PhaiTra.ToString("N0") VND</td>
+                        <td>@donHang.TrangThaiDH</td>
+                        <td>
+                            <a href="@Url.Action("ChiTietDonHang", "DonHang", new { id = donHang.MaDH })" class="btn btn-primary">Xem chi tiết</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</body>
+</html>
+
+
+
+
+
+
+

@@ -1,0 +1,81 @@
+﻿@using QUANLYVANPHONGPHAM.Models
+@model IEnumerable<DonHang>
+@{
+    ViewBag.Title = "DonHangDangVanChuyen";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+
+<style>
+
+    table {
+        width: 100%;
+    }
+
+    tr {
+        border-bottom: 1px solid #ddd;
+    }
+
+        tr:nth-child(even) {
+            background-color: #D6EEEE;
+        }
+</style>
+<body>
+    <h2>Đơn hàng đang vận chuyển</h2>
+    @if (!Model.Any())
+    {
+        <p style="color: red; font-size: 16px; font-weight: bold;">
+            Hiện tại không có đơn hàng nào đang được giao.
+        </p>
+    }
+
+
+    else
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Mã đơn hàng</th>
+                    <th>Ngày đặt hàng</th>
+                    <th>Tổng tiền</th>
+                    <th>Giảm giá</th>
+                    <th>Phải trả</th>
+                    <th>Ngày giao</th>
+                    <th>Trạng thái</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var donHang in Model)
+                {
+                    <tr>
+                        <td>@donHang.MaDH</td>
+                        <td>@donHang.NgayDatHang.ToString("dd/MM/yyyy")</td>
+                        <td>@donHang.TongTien.ToString("N0") VND</td>
+                        <td>@donHang.GiamGia.ToString()</td>
+                        <td>@donHang.PhaiTra.ToString("N0") VND</td>
+                        <td>@donHang.NgayGiao.Value.ToString("dd/MM/yyyy")</td>
+                        <td>@donHang.TrangThaiDH</td>
+                        <td>
+                            @* ngày giao hàng <= ngày hiện tại tức là đơn hàng lúc này đã giao đến cho khách hàng *@
+                            @if (donHang.TrangThaiDH == "Đã xác nhận và đang giao hàng" && donHang.NgayGiao <= DateTime.Now)
+                            {
+                                using(Html.BeginForm("XacNhanDaNhanHang", "DonHang", FormMethod.Post))
+                                {
+                                    @Html.Hidden("maDH", donHang.MaDH)
+                                    <button type="submit" class="btn btn-primary">Đã nhận hàng</button>
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</body>
+</html>
+

@@ -1,0 +1,51 @@
+﻿@using QUANLYVANPHONGPHAM.Models
+@model IEnumerable<ChiTietDonHang>
+@{
+    ViewBag.Title = "ChiTietDonHang";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+<style>
+    table {
+        width: 100%;
+    }
+
+    tr {
+        border-bottom: 1px solid #ddd;
+    }
+
+        tr:nth-child(even) {
+            background-color: #D6EEEE;
+        }
+</style>
+
+
+
+<h2>Chi tiết đơn hàng: @ViewBag.DonHang.MaDH</h2>
+<p>Ngày đặt hàng: @ViewBag.DonHang.NgayDatHang.ToString("dd/MM/yyyy")</p>
+<p>Trạng thái: @ViewBag.DonHang.TrangThaiDH</p>
+<p>Tổng tiền: @ViewBag.DonHang.TongTien.ToString("N0") VND</p>
+<p>Giảm giá: @ViewBag.DonHang.GiamGia.ToString("N0") VND</p>
+<p>Phải trả: @ViewBag.DonHang.PhaiTra.ToString("N0") VND</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Sản phẩm</th>
+            <th>Số lượng</th>
+            <th>Đơn giá</th>
+            <th>Thành tiền</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.SanPham.TenSP</td>
+                <td>@item.SoLuong</td>
+                <td>@item.DonGia.ToString("N0") VND</td>
+                <td>@(item.SoLuong * item.DonGia) VND</td>
+            </tr>
+        }
+    </tbody>
+</table>

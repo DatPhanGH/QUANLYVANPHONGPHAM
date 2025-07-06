@@ -1,0 +1,79 @@
+﻿@using QUANLYVANPHONGPHAM.Models;
+@model List<SanPham>
+
+@{
+    ViewBag.Title = "Tài sản";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<html>
+<style>
+    table {
+        width: 100%; /* Đặt chiều rộng bảng 100% */
+        border-collapse: collapse; /* Hợp nhất viền của các ô */
+    }
+
+    th, td {
+        border: 1px solid #ddd; /* Viền cho các ô */
+        padding: 8px; /* Khoảng cách bên trong các ô */
+        text-align: left; /* Căn chỉnh chữ bên trái */
+    }
+
+    th {
+        background-color: #f2f2f2; /* Màu nền cho tiêu đề */
+        font-weight: bold; /* Đậm cho tiêu đề */
+    }
+
+    tr:hover {
+        background-color: #f1f1f1; /* Màu nền khi di chuột qua hàng */
+    }
+</style>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>TÀI SẢN</title>
+</head>
+<body>
+    <a href="@Url.Action("themSP","Admin")">Thêm sản phẩm mới +</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>MÃ SẢN PHẨM</th>
+                <th>MÃ LOẠI</th>
+                <th>TÊN SẢN PHẨM</th>
+                <th>MÔ TẢ</th>
+                <th>GIÁ BÁN</th>
+                <th>SỐ LƯỢNG TỒN</th>
+                <th>HÌNH ẢNH</th>
+                <th>HÀNH ĐỘNG</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var i in Model)
+            {
+                <tr>
+                    <td>@i.MaSP</td>
+                    <td>@i.MaLoai</td>
+                    <td>@i.TenSP</td>
+                    <td>@i.MoTa</td>
+                    <td>@i.GiaBan</td>
+                    <td>@i.SoLuongTon</td>
+                    <td>
+                        <img src="~/@i.HinhAnh" alt="@i.TenSP" width="30px">
+                    </td>
+                    <td>
+                        <a href="@Url.Action("EditSP", "Admin", new { id = i.MaSP })" class="btn btn-warning">Sửa</a>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("DeleteSP", "Admin", new { id = i.MaSP })" class="btn btn-danger"
+                           onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này không?');">Xóa</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+
+
+</html>
